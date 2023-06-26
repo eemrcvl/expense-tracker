@@ -1,5 +1,5 @@
-import {GlobalStyles} from '../../constants/Styles';
-import {Expense} from '../../types/ExpenseTypes';
+import {GlobalStyles} from '../../constants/styles';
+import {Expense} from '../../types/expense';
 import {Pressable, View, Text, StyleSheet} from 'react-native';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -12,22 +12,24 @@ const ExpenseItem = ({expense}: ExpenseItemProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const expensePressHandler = () => {
-    navigation.navigate('ManageExpense');
+    navigation.navigate('ManageExpense', {
+      expenseId: expense.id,
+    });
   };
-
+  console.log(expense);
   return (
     <Pressable onPress={expensePressHandler}>
       <View style={styles.expenseItem}>
         <View>
           <Text style={[styles.textBase, styles.description]}>
-            {expense.getDescription()}
+            {expense.description}
           </Text>
           <Text style={styles.textBase}>
-            {expense.getDate().toDateString()}
+            {new Date(expense.date * 1000).toISOString()}
           </Text>
         </View>
         <View style={styles.amountContainer}>
-          <Text style={styles.amount}>${expense.getAmount().toFixed(2)}</Text>
+          <Text style={styles.amount}>${expense.amount.toFixed(2)}</Text>
         </View>
       </View>
     </Pressable>

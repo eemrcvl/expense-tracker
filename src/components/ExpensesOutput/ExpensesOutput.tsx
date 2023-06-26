@@ -2,8 +2,8 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import ExpensesSummary from './ExpensesSummary';
 import ExpensesList from './ExpensesList';
-import {ExpenseProps} from '../../types/ExpenseTypes';
-import {GlobalStyles} from '../../constants/Styles';
+import {ExpenseProps} from '../../types/expense';
+import {GlobalStyles} from '../../constants/styles';
 
 const ExpensesOutput = ({expenseList, periodName}: ExpenseProps) => {
   return (

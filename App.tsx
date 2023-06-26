@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect, useLayoutEffect} from 'react';
 import {StatusBar} from 'react-native';
 import ManageExpense from './src/screens/ManageExpense';
 import RecentExpenses from './src/screens/RecentExpenses';
@@ -13,12 +13,27 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AllExpenses from './src/screens/AllExpenses';
-import {GlobalStyles} from './src/constants/Styles';
+import {GlobalStyles} from './src/constants/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from './src/components/ui/IconButton';
+import {Provider} from 'react-redux';
+import {store} from './src/store/redux';
+import 'react-native-get-random-values';
 
-const Stack = createNativeStackNavigator();
-const BottomTabs = createBottomTabNavigator();
+export type RootStackParamList = {
+  AllExpenses: undefined;
+  RecentExpenses: undefined;
+  ManageExpense: {expenseId: string};
+  ExpensesOverview: undefined;
+};
+
+export type RootBottomTabParamList = {
+  AllExpenses: undefined;
+  RecentExpenses: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+const BottomTabs = createBottomTabNavigator<RootBottomTabParamList>();
 
 interface TabBarIconProps {
   color: string;
@@ -67,24 +82,30 @@ function ExpensesOverview(): JSX.Element {
     </BottomTabs.Navigator>
   );
 }
-
 function App(): JSX.Element {
   return (
     <>
       <StatusBar />
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="ExpensesOverview"
-            component={ExpensesOverview}
-            options={{
-              headerShown: false,
-            }}></Stack.Screen>
-          <Stack.Screen
-            name="ManageExpense"
-            component={ManageExpense}></Stack.Screen>
-        </Stack.Navigator>
-      </NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: {backgroundColor: GlobalStyles.colors.primary500},
+              headerTintColor: 'white',
+            }}>
+            <Stack.Screen
+              name="ExpensesOverview"
+              component={ExpensesOverview}
+              options={{
+                headerShown: false,
+              }}></Stack.Screen>
+            <Stack.Screen
+              name="ManageExpense"
+              component={ManageExpense}
+              options={{presentation: 'modal'}}></Stack.Screen>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
     </>
   );
 }

@@ -1,11 +1,11 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {ExpenseProps} from '../../types/ExpenseTypes';
-import {GlobalStyles} from '../../constants/Styles';
+import {ExpenseProps} from '../../types/expense';
+import {GlobalStyles} from '../../constants/styles';
 
 const ExpensesSummary = ({periodName, expenseList}: ExpenseProps) => {
   const expenseSum = expenseList.reduce((sum, expense) => {
-    return sum + expense.getAmount();
+    return sum + expense.amount;
   }, 0);
 
   return (

@@ -1,15 +1,28 @@
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import ExpensesOutput from '../components/ExpensesOutput/ExpensesOutput';
-import {Expense} from '../types/ExpenseTypes';
+import {RootStackParamList} from '../../App';
+import React from 'react';
+import {useSelector} from 'react-redux';
+import {RootState} from '../store/redux';
+import {getDateMinusDays} from '../util/date';
 
-const DUMMY_EXPENSES = [
-  new Expense('e1', 'Shoes', 59.99, new Date('2023-06-18')),
-  new Expense('e2', 'Trousers', 60.99, new Date('2023-06-17')),
-  new Expense('e3', 'Bananas', 5.99, new Date('2023-05-15')),
-];
+type RecentExpensesScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'RecentExpenses'
+>;
 
-const RecentExpenses = () => {
+const RecentExpenses: React.FC<RecentExpensesScreenProps> = () => {
+  const expenses = useSelector((state: RootState) => state.expense);
+
+  const recentExpenses = expenses.filter(expense => {
+    const today = new Date();
+    const sevenDaysAgo = getDateMinusDays(today, 7);
+    const expenseDate = new Date(expense.date * 1000); // unix timestamp
+    return expenseDate > sevenDaysAgo && expenseDate <= today;
+  });
+
   return (
-    <ExpensesOutput periodName="Last 7 days" expenseList={DUMMY_EXPENSES} />
+    <ExpensesOutput periodName="Last 7 days" expenseList={recentExpenses} />
   );
 };
 

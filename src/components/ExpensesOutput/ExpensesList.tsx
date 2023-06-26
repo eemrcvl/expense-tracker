@@ -1,6 +1,6 @@
 import React from 'react';
-import {FlatList, ListRenderItem, ListRenderItemInfo, Text} from 'react-native';
-import {Expense} from '../../types/ExpenseTypes';
+import {FlatList, ListRenderItemInfo} from 'react-native';
+import {Expense} from '../../types/expense';
 import ExpenseItem from './ExpenseItem';
 
 type ExpensesListProps = {
@@ -16,7 +16,7 @@ const ExpensesList = ({expensesList}: ExpensesListProps) => {
     <FlatList
       data={expensesList}
       renderItem={renderExpenseItem}
-      keyExtractor={item => item.getId()}
+      keyExtractor={item => item.id}
     />
   );
 };
